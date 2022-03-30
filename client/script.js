@@ -21,13 +21,42 @@ async function loadAllNotes() {
     })
 }
 
+async function deleteNote(note) {
+    console.log('DELETE: ', note.id);
+    const response = await fetch('http://localhost:3000/note?id=' + note.id, {
+        method: 'DELETE',
+    });
+    location.reload();
+}
+
+async function updateState(note) {
+    const response = await fetch('http://localhost:3000/note?id=' + note.id + '&state=' + note.done, {
+        method: 'PUT',
+    });
+    const notes = await response.json();
+}
+
 let createTaskCard = (note) => {
     let card = document.createElement('div');
     card.className = 'card shadow cursor-pointer';
 
     let cardHeader = document.createElement('div');
     cardHeader.className = 'card-header';
+    cardHeader.style.display = "flex";
+    cardHeader.style.justifyContent = 'space-between';
+
     cardHeader.innerText = note.category;
+    let deleteIocn = document.createElement('i');
+    deleteIocn.className = 'fa fa-trash-o';
+    deleteIocn.ariaHidden = 'true';
+    deleteIocn.style.cursor = 'pointer';
+    deleteIocn.setAttribute('data-toggle', 'tooltip');
+    deleteIocn.setAttribute('data-placement', 'top');
+    deleteIocn.setAttribute('title', 'Delete');
+    cardHeader.appendChild(deleteIocn);
+    deleteIocn.onclick = () => {
+        deleteNote(note);
+    }
 
     let cardBody = document.createElement('div');
     cardBody.className = 'card-body';
@@ -38,8 +67,18 @@ let createTaskCard = (note) => {
 
     let button = document.createElement('button');
     button.type = 'button';
-    button.className = 'btn btn-outline-danger';
-    button.innerText = 'Nicht erledigt';
+    if (note.done) {
+        button.className = 'btn btn-outline-success';
+        button.innerText = 'Erledigt';
+    } else {
+        button.className = 'btn btn-outline-danger';
+        button.innerText = 'Nicht erledigt';
+    }
+    button.onclick = () => {
+        button.className = 'btn btn-outline-success';
+        button.innerText = 'Erledigt';
+        updateState(note);
+    }
 
     let cardFooter = document.createElement('div');
     cardFooter.className = 'card-footer text-muted';

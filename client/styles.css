@@ -1,6 +1,12 @@
 * {
     margin: 0;
 }
+.alert{
+    text-align: center;
+    margin-top: 5%;
+    margin-left: 40%;
+    margin-right: 40%;
+}
 .header {
     background-color: lightgray;
     text-align: center;
@@ -25,6 +31,7 @@
 .content {
     display: flex;
     flex-wrap: wrap;
+    margin-top: 5%;
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 3%;

@@ -15,6 +15,9 @@ export class Note {
     @Column({type: 'varchar', length: 120})
     public dueDate: string;
 
+    @Column({type: 'boolean'})
+    public done: boolean;
+
     @ManyToOne(() => Person, (user) => user.notes)
     person: Person;
 }

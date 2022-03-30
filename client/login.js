@@ -6,5 +6,17 @@ async function authenticate() {
     const status = await response.json();
     if (status) {
         window.location.href = "mainpage.html";
+    } else {
+        let alert = document.createElement('div');
+        alert.className = 'alert alert-danger';
+        alert.role = 'alert';
+        alert.innerText = 'Username or password wrong'
+
+        const div = document.querySelector('.login');
+        insertAfter(alert, div);
     }
+}
+
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 }
