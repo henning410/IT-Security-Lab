@@ -36,6 +36,27 @@ async function updateState(note) {
     const notes = await response.json();
 }
 
+async function saveNote() {
+    const category =  document.getElementById('category').value;
+    const description =  document.getElementById('description').value;
+    const dueDate =  document.getElementById('dueDate').value;
+    const note = {
+        "category": category,
+        "note": description,
+        "dueDate": dueDate,
+    }
+    console.log('Neue Notiz: ', note);
+    await fetch('http://localhost:3000/note/create', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(note),
+    });
+    location.reload();
+}
+
 let createTaskCard = (note) => {
     let card = document.createElement('div');
     card.className = 'card shadow cursor-pointer';
@@ -110,7 +131,6 @@ async function submit() {
     user.forEach(user => {
         const name = document.createElement('h2');
         name.innerHTML = user.username
-        //const name = newEl('h2', {innerText: user.name});
         div.appendChild(name);
     })
 }

@@ -35,17 +35,20 @@
 				<div class="login">
 					<div>
 						<div class="loginFields">
-							<input type="text" class="form-control" id="username" placeholder="Description" aria-label="Description" aria-describedby="basic-addon1">
+							<input type="text" class="form-control" id="category" placeholder="Category" aria-label="Category" aria-describedby="basic-addon1">
 						</div>
 						<div class="loginFields">
-							<input type="password" class="form-control" id="password" placeholder="Due Date" aria-label="Due Date" aria-describedby="basic-addon1">
+							<input type="text" class="form-control" id="description" placeholder="Description" aria-label="Description" aria-describedby="basic-addon1">
+						</div>
+						<div class="loginFields">
+							<input type="text" class="form-control" id="dueDate" placeholder="Due Date" aria-label="Due Date" aria-describedby="basic-addon1">
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-primary" onclick="saveNote()">Save changes</button>
 			</div>
 		</div>
 	</div>

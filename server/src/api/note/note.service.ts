@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Note} from "../entities/note.entity";
 import {Repository, UpdateResult} from "typeorm";
+import {Person} from "../entities/user.entity";
 
 @Injectable()
 export class NoteService {
@@ -25,6 +26,18 @@ export class NoteService {
             .delete()
             .from(Note)
             .where("id = :id", { id: id })
+            .execute();
+    }
+
+    public add(category: string, note: string, dueDate: string) {
+        let person = new Person();
+        person.id = 1;
+        return this.repository.createQueryBuilder()
+            .insert()
+            .into(Note)
+            .values([
+                { category: category, note: note, dueDate: dueDate, done: false, person: person},
+            ])
             .execute();
     }
 }
