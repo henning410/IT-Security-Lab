@@ -13,6 +13,11 @@ export class NoteService {
         return this.repository.query('SELECT *  FROM note WHERE "personId" = ' + id + 'ORDER BY id ASC');
     }
 
+    public getNotesByCategoryAndUser(userId: number, category: any): Promise<Note[]> {
+        //return this.repository.query('SELECT *  FROM person WHERE category = ' + category + 'AND "personId" = ' + userId);
+        return this.repository.query('SELECT *  FROM note WHERE category = ' + category);
+    }
+
     public changeState(id: number, currentState: boolean): Promise<UpdateResult> {
         return this.repository.createQueryBuilder()
             .update(Note)

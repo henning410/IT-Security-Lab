@@ -28,6 +28,14 @@
     margin-left: 2%;
     margin-bottom: 3%;
 }
+.button {
+    margin-top: 1%;
+    display: flex;
+    justify-content: center;
+}
+#submit{
+    margin-left: 2%;
+}
 .content {
     display: flex;
     flex-wrap: wrap;

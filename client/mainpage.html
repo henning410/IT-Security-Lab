@@ -16,10 +16,11 @@
 	<h1>Note App - Keep everything in mind</h1>
 </div>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-	Create Note
-</button>
+<div class="button">
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+		Create Note
+	</button>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -60,15 +61,15 @@
 <div class="userinfo">
 	<h3>Eingeloggt als:</h3>
 	<div class="usernamePlace"></div>
-	<input type="text" placeholder="Search user by ID" class="inputID">
-	<button type="submit" onclick="submit()">Submit</button>
-	<h3>Ergebnis:</h3>
-	<div class="container1"></div>
 </div>
+<div class="button">
+	<input type="text" placeholder="Search notes by category" class="inputCategory">
+	<button type="submit" class="btn btn-primary" id="submit" onclick="submit()">Search</button>
+</div>
+<div class="container1 button"></div>
 
 <div class="footer">
 	<p>&copy; Henning Weise</p>
 </div>
 </body>
-
 </html>

@@ -2,6 +2,7 @@ import {Body, Controller, Delete, Get, Inject, Post, Put, Query, ValidationPipe}
 import {NoteService} from "./note.service";
 import {Note} from "../entities/note.entity";
 import {UpdateResult} from "typeorm";
+import {Person} from "../entities/user.entity";
 
 @Controller('note')
 export class NoteController {
@@ -11,6 +12,11 @@ export class NoteController {
     @Get()
     public getNotesByUser(@Query('id') id: number): Promise<Note[]> {
         return this.service.getNotesByUser(id);
+    }
+
+    @Get('/category')
+    public getNotesByCategoryAndUser(@Query('userId') id: number, @Query('category') category: any): Promise<Note[]> {
+        return this.service.getNotesByCategoryAndUser(id, category);
     }
 
     @Put()

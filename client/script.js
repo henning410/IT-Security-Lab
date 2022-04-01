@@ -120,18 +120,18 @@ let createTaskCard = (note) => {
 }
 
 async function submit() {
-    const value = document.querySelector('.inputID').value;
-    const response = await fetch('http://localhost:3000/user?id=' + value, {
+    const value = document.querySelector('.inputCategory').value;
+    const response = await fetch('http://localhost:3000/note/category?userId=' + 1 + '&category=' + value, {
         method: 'GET',
     });
-    const user = await response.json();
+    const note = await response.json();
     const div = document.querySelector('.container1');
     div.innerHTML = "";
 
-    user.forEach(user => {
-        const name = document.createElement('h2');
-        name.innerHTML = user.username
-        div.appendChild(name);
+    note.forEach(note => {
+        //const name = document.createElement('h2');
+        //name.innerHTML = note.note
+        div.appendChild(createTaskCard(note));
     })
 }
 
