@@ -150,6 +150,10 @@ async function submit() {
     }
 }
 
+function logout() {
+    window.location.href = "login.html";
+}
+
 //Method extract data from cookie
 function getCookie(key) {
     let name = key + "=";
