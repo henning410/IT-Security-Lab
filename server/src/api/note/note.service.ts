@@ -34,9 +34,9 @@ export class NoteService {
             .execute();
     }
 
-    public add(category: string, note: string, dueDate: string) {
-        let person = new Person();
-        person.id = 1;
+    public add(category: string, note: string, dueDate: string, personID: number) {
+        const person = new Person();
+        person.id = personID;
         return this.repository.createQueryBuilder()
             .insert()
             .into(Note)

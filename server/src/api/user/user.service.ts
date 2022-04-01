@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
+import {InsertResult, Repository} from 'typeorm';
 import {Person} from '../entities/user.entity';
 
 @Injectable()
@@ -28,10 +28,11 @@ export class UserService {
             .getRawOne();
     }
 
-    public createUser(body: Person): Promise<Person> {
-        const user: Person = new Person();
-        user.username = body.username;
-        user.email = body.email;
-        return this.repository.save(user);
+    public createUser(body: Person): Promise<InsertResult> {
+        return this.repository.createQueryBuilder()
+            .insert()
+            .into(Person)
+            .values({ username: body.username, email: body.email, password: body.password })
+            .execute();
     }
 }

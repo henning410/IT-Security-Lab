@@ -1,39 +1,44 @@
-window.addEventListener('load', function () {
-    console.log(document.cookie)
+let user;
+window.addEventListener('load', async function () {
     console.log('username from cookie: ', getCookie('username'));
     const div = document.querySelector('.usernamePlace');
     div.innerHTML = getCookie('username');
-    loadAllNotes();
+    await getUser();
+    await loadAllNotes();
 })
 
-async function loadAllNotes() {
+//Method to get current user object from backend using cookie data
+async function getUser() {
     const response1 = await fetch('http://localhost:3000/user/getByName?username=' + getCookie('username'));
-    const user = await response1.json();
-    console.log('USER: ', user);
+    user = await response1.json();
+    console.log('User from backend: ', user);
+}
 
+//Method to load all notes from backend for specific user
+async function loadAllNotes() {
     const response = await fetch('http://localhost:3000/note?id=' + user.id);
     const notes = await response.json();
     const div = document.querySelector('.content');
+    div.innerHTML = '';
     notes.forEach(note => {
         const name = document.createElement('h4');
         name.innerHTML = note.note;
-        div.appendChild(createTaskCard(note));
+        div.appendChild(createNoteCard(note));
     })
 }
 
 async function deleteNote(note) {
-    console.log('DELETE: ', note.id);
-    const response = await fetch('http://localhost:3000/note?id=' + note.id, {
+    await fetch('http://localhost:3000/note?id=' + note.id, {
         method: 'DELETE',
     });
     location.reload();
 }
 
+//Method to update state of current note (Done/Not Done)
 async function updateState(note) {
-    const response = await fetch('http://localhost:3000/note?id=' + note.id + '&state=' + note.done, {
+    await fetch('http://localhost:3000/note?id=' + note.id + '&state=' + note.done, {
         method: 'PUT',
     });
-    const notes = await response.json();
 }
 
 async function saveNote() {
@@ -41,6 +46,7 @@ async function saveNote() {
     const description =  document.getElementById('description').value;
     const dueDate =  document.getElementById('dueDate').value;
     const note = {
+        "personId": user.id,
         "category": category,
         "note": description,
         "dueDate": dueDate,
@@ -57,7 +63,8 @@ async function saveNote() {
     location.reload();
 }
 
-let createTaskCard = (note) => {
+//Method to create frontend card for note
+let createNoteCard = (note) => {
     let card = document.createElement('div');
     card.className = 'card shadow cursor-pointer';
 
@@ -75,8 +82,8 @@ let createTaskCard = (note) => {
     deleteIocn.setAttribute('data-placement', 'top');
     deleteIocn.setAttribute('title', 'Delete');
     cardHeader.appendChild(deleteIocn);
-    deleteIocn.onclick = () => {
-        deleteNote(note);
+    deleteIocn.onclick = async () => {
+        await deleteNote(note);
     }
 
     let cardBody = document.createElement('div');
@@ -95,10 +102,15 @@ let createTaskCard = (note) => {
         button.className = 'btn btn-outline-danger';
         button.innerText = 'Nicht erledigt';
     }
-    button.onclick = () => {
-        button.className = 'btn btn-outline-success';
-        button.innerText = 'Erledigt';
-        updateState(note);
+    button.onclick = async () => {
+        if (!note.done) {
+            button.className = 'btn btn-outline-success';
+            button.innerText = 'Erledigt';
+        } else {
+            button.className = 'btn btn-outline-danger';
+            button.innerText = 'Nicht erledigt';
+        }
+        await updateState(note);
     }
 
     let cardFooter = document.createElement('div');
@@ -119,22 +131,26 @@ let createTaskCard = (note) => {
     return card;
 }
 
+//Method to search notes by category for specific user
 async function submit() {
     const value = document.querySelector('.inputCategory').value;
-    const response = await fetch('http://localhost:3000/note/category?userId=' + 1 + '&category=' + value, {
-        method: 'GET',
-    });
-    const note = await response.json();
-    const div = document.querySelector('.container1');
-    div.innerHTML = "";
+    if (value!=='') {
+        const response = await fetch('http://localhost:3000/note/category?userId=' + user.id + '&category=' + value, {
+            method: 'GET',
+        });
+        const note = await response.json();
+        const div = document.querySelector('.content');
+        div.innerHTML = "";
 
-    note.forEach(note => {
-        //const name = document.createElement('h2');
-        //name.innerHTML = note.note
-        div.appendChild(createTaskCard(note));
-    })
+        note.forEach(note => {
+            div.appendChild(createNoteCard(note));
+        })
+    } else {
+        await loadAllNotes();
+    }
 }
 
+//Method extract data from cookie
 function getCookie(key) {
     let name = key + "=";
     let decodedCookie = decodeURIComponent(document.cookie);

@@ -26,8 +26,8 @@ export class NoteController {
 
     @Post('/create')
     public addNote(@Body() note: any) {
-        console.log('NOTIZ: ', note.category);
-        return this.service.add(note.category, note.note, note.dueDate);
+        console.log('NOTIZ: ', note);
+        return this.service.add(note.category, note.note, note.dueDate, note.personId);
     }
 
     @Delete()

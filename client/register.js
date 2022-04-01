@@ -2,21 +2,29 @@ async function createUser() {
     const password =  document.getElementById('password').value;
     const username =  document.getElementById('username').value;
     const repeatPassword = document.getElementById('passwordRepeat').value;
-    document.cookie = "username=" + username +  ";path=/";
-    const response = await fetch('http://localhost:3000/user?username=' + username + '&password=' + password, {
-        method: "POST"
-    });
-    const status = await response.json();
-    if (status) {
-        window.location.href = "mainpage.html";
-    } else {
+    const user = {
+        "username": username,
+        "email": 'test@test.com',
+        "password": password,
+    }
+    if (repeatPassword !== password) {
         let alert = document.createElement('div');
         alert.className = 'alert alert-danger';
         alert.role = 'alert';
-        alert.innerText = 'Username or Password wrong'
-
+        alert.innerText = 'Passwords must be equal'
         const div = document.querySelector('.login');
         insertAfter(alert, div);
+    } else {
+        console.log('Neuer User: ', user);
+        await fetch('http://localhost:3000/user', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user),
+        });
+        window.location.href = "login.html";
     }
 }
 

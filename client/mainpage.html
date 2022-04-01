@@ -14,12 +14,18 @@
 <body>
 <div class="header">
 	<h1>Note App - Keep everything in mind</h1>
+	<div class="usernamePlace"></div>
 </div>
 
 <div class="button">
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-		Create Note
+	<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+		Create new Note
 	</button>
+	<div style="display: flex">
+		<input type="text" placeholder="Search notes by category" id="searchField" class="inputCategory">
+		<button type="submit" class="btn btn-outline-primary" id="submit"  onclick="submit()">Search</button>
+	</div>
+	<button type="submit" class="btn btn-outline-primary" id=logout  onclick="submit()"> <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
 </div>
 
 <!-- Modal -->
@@ -57,16 +63,6 @@
 
 <div class="content">
 </div>
-
-<div class="userinfo">
-	<h3>Eingeloggt als:</h3>
-	<div class="usernamePlace"></div>
-</div>
-<div class="button">
-	<input type="text" placeholder="Search notes by category" class="inputCategory">
-	<button type="submit" class="btn btn-primary" id="submit" onclick="submit()">Search</button>
-</div>
-<div class="container1 button"></div>
 
 <div class="footer">
 	<p>&copy; Henning Weise</p>
