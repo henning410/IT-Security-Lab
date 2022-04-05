@@ -1,10 +1,10 @@
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {InsertResult, Repository} from 'typeorm';
-import {Person} from '../entities/user.entity';
+import {Person} from '../entities/person.entity';
 
 @Injectable()
-export class UserService {
+export class PersonService {
     @InjectRepository(Person)
     private readonly repository: Repository<Person>;
 
@@ -16,16 +16,13 @@ export class UserService {
         return this.repository.query('SELECT *  FROM person');
     }
 
-    public getUserByName(username: string): Promise<Person> {
-        return this.repository.createQueryBuilder("person").where("person.username = :username", {username: username}).getOne();
+    public login(username: any, password: any) {
+        const sql = 'SELECT * FROM person WHERE username =' + "'" + username + "'" + ' AND password =' + "'" + password + "'";
+        return this.repository.query(sql);
     }
 
-    public getPassword(username: string): Promise<Person> {
-        return this.repository.createQueryBuilder("person")
-            .select("person.password")
-            .from(Person, "users")
-            .where("person.username = :username", {username: username})
-            .getRawOne();
+    public getUserByName(username: string): Promise<Person> {
+        return this.repository.createQueryBuilder("person").where("person.username = :username", {username: username}).getOne();
     }
 
     public createUser(body: Person): Promise<InsertResult> {

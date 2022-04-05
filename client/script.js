@@ -1,10 +1,11 @@
 let user;
+/*let searchTerm = '';*/
 window.addEventListener('load', async function () {
     console.log('username from cookie: ', getCookie('username'));
     const div = document.querySelector('.usernamePlace');
     div.innerHTML = getCookie('username');
     await getUser();
-    await loadAllNotes();
+    await loadAllTodos();
 })
 
 //Method to get current user object from backend using cookie data
@@ -14,57 +15,57 @@ async function getUser() {
     console.log('User from backend: ', user);
 }
 
-//Method to load all notes from backend for specific user
-async function loadAllNotes() {
-    const response = await fetch('http://localhost:3000/note?id=' + user.id);
-    const notes = await response.json();
+//Method to load all todos from backend for specific user
+async function loadAllTodos() {
+    const response = await fetch('http://localhost:3000/todo?id=' + user.id);
+    const todos = await response.json();
     const div = document.querySelector('.content');
     div.innerHTML = '';
-    notes.forEach(note => {
+    todos.forEach(todo => {
         const name = document.createElement('h4');
-        name.innerHTML = note.note;
-        div.appendChild(createNoteCard(note));
+        name.innerHTML = todo.text;
+        div.appendChild(createTodoCard(todo));
     })
 }
 
-async function deleteNote(note) {
-    await fetch('http://localhost:3000/note?id=' + note.id, {
+async function deleteTodo(todo) {
+    await fetch('http://localhost:3000/todo?id=' + todo.id, {
         method: 'DELETE',
     });
     location.reload();
 }
 
-//Method to update state of current note (Done/Not Done)
-async function updateState(note) {
-    await fetch('http://localhost:3000/note?id=' + note.id + '&state=' + note.done, {
+//Method to update state of current todo (Done/Not Done)
+async function updateState(todo) {
+    await fetch('http://localhost:3000/todo?id=' + todo.id + '&state=' + todo.done, {
         method: 'PUT',
     });
 }
 
-async function saveNote() {
+async function saveTodo() {
     const category =  document.getElementById('category').value;
     const description =  document.getElementById('description').value;
     const dueDate =  document.getElementById('dueDate').value;
-    const note = {
+    const todo = {
         "personId": user.id,
         "category": category,
-        "note": description,
+        "text": description,
         "dueDate": dueDate,
     }
-    console.log('Neue Notiz: ', note);
-    await fetch('http://localhost:3000/note/create', {
+    console.log('Neue Notiz: ', todo);
+    await fetch('http://localhost:3000/todo/create', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(note),
+        body: JSON.stringify(todo),
     });
     location.reload();
 }
 
-//Method to create frontend card for note
-let createNoteCard = (note) => {
+//Method to create frontend card for todo
+let createTodoCard = (todo) => {
     let card = document.createElement('div');
     card.className = 'card shadow cursor-pointer';
 
@@ -73,7 +74,7 @@ let createNoteCard = (note) => {
     cardHeader.style.display = "flex";
     cardHeader.style.justifyContent = 'space-between';
 
-    cardHeader.innerText = note.category;
+    cardHeader.innerText = todo.category;
     let deleteIocn = document.createElement('i');
     deleteIocn.className = 'fa fa-trash-o';
     deleteIocn.ariaHidden = 'true';
@@ -83,19 +84,19 @@ let createNoteCard = (note) => {
     deleteIocn.setAttribute('title', 'Delete');
     cardHeader.appendChild(deleteIocn);
     deleteIocn.onclick = async () => {
-        await deleteNote(note);
+        await deleteTodo(todo);
     }
 
     let cardBody = document.createElement('div');
     cardBody.className = 'card-body';
 
     let title = document.createElement('h5');
-    title.innerText = note.note;
+    title.innerText = todo.text;
     title.className = 'card-title';
 
     let button = document.createElement('button');
     button.type = 'button';
-    if (note.done) {
+    if (todo.done) {
         button.className = 'btn btn-outline-success';
         button.innerText = 'Erledigt';
     } else {
@@ -103,14 +104,14 @@ let createNoteCard = (note) => {
         button.innerText = 'Nicht erledigt';
     }
     button.onclick = async () => {
-        if (!note.done) {
+        if (!todo.done) {
             button.className = 'btn btn-outline-success';
             button.innerText = 'Erledigt';
         } else {
             button.className = 'btn btn-outline-danger';
             button.innerText = 'Nicht erledigt';
         }
-        await updateState(note);
+        await updateState(todo);
     }
 
     let cardFooter = document.createElement('div');
@@ -120,7 +121,7 @@ let createNoteCard = (note) => {
     clockIcon.ariaHidden = 'true';
     cardFooter.appendChild(clockIcon);
     let footerText = document.createElement('a');
-    footerText.innerText = ' ' + note.dueDate;
+    footerText.innerText = ' ' + todo.dueDate;
     clockIcon.appendChild(footerText);
 
     cardBody.appendChild(title);
@@ -131,22 +132,28 @@ let createNoteCard = (note) => {
     return card;
 }
 
-//Method to search notes by category for specific user
+//Method to search todos by category for specific user
 async function submit() {
     const value = document.querySelector('.inputCategory').value;
     if (value!=='') {
-        const response = await fetch('http://localhost:3000/note/category?userId=' + user.id + '&category=' + value, {
+        const response = await fetch('http://localhost:3000/todo/category?userId=' + user.id + '&category=' + value, {
             method: 'GET',
         });
-        const note = await response.json();
+        const todos = await response.json();
         const div = document.querySelector('.content');
         div.innerHTML = "";
-
-        note.forEach(note => {
-            div.appendChild(createNoteCard(note));
-        })
+        if (todos.length > 0){
+            todos.forEach(todo => {
+                div.appendChild(createTodoCard(todo));
+            })
+        }
+        /*searchTerm = value;*/
+        const searchTerm = document.querySelector('#searchTerm');
+        searchTerm.innerHTML = 'Searchterm: ' + value;
     } else {
-        await loadAllNotes();
+        await loadAllTodos();
+        const searchTerm = document.querySelector('#searchTerm');
+        searchTerm.innerHTML = '';
     }
 }
 

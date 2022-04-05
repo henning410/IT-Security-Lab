@@ -1,13 +1,13 @@
 import {Body, Controller, Get, Inject, Param, ParseIntPipe, Post, Query} from '@nestjs/common';
-import { Person } from '../entities/user.entity';
-import { UserService } from './user.service';
+import { Person } from '../entities/person.entity';
+import { PersonService } from './person.service';
 import { Logger } from '@nestjs/common';
 import {InsertResult} from "typeorm";
 
 @Controller('user')
-export class UserController {
-    @Inject(UserService)
-    private readonly service: UserService;
+export class PersonController {
+    @Inject(PersonService)
+    private readonly service: PersonService;
 
     @Get()
     public getUser(@Query('id') id: any): Promise<Person> {
@@ -25,12 +25,8 @@ export class UserController {
     }
 
     @Get('login')
-    public async login(@Query('password') password: string, @Query('username') username: string): Promise<boolean> {
-        let passwordFromDB = "";
-        if (await this.service.getPassword(username)) {
-            passwordFromDB = (await this.service.getPassword(username)).password;
-        }
-        return password == passwordFromDB;
+    public async login(@Query('password') password: string, @Query('username') username: string) {
+        return this.service.login(username, password);
     }
 
     @Post()

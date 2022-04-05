@@ -13,19 +13,21 @@
 </head>
 <body>
 <div class="header1">
-	<h1>Note App - Keep everything in mind</h1>
+	<h1>ToDo App - Don't loose track</h1>
 	<div class="usernamePlace"></div>
 </div>
 
 <div class="button">
 	<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
-		Create new Note
+		Create new ToDo
 	</button>
 	<div style="display: flex">
-		<input type="text" placeholder="Search notes by category" id="searchField" class="inputCategory">
+		<input type="text" placeholder="Search todos by category" id="searchField" class="inputCategory">
 		<button type="submit" class="btn btn-outline-primary" id="submit"  onclick="submit()">Search</button>
 	</div>
 	<button type="submit" class="btn btn-outline-primary" id=logout  onclick="logout()"> <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+</div>
+<div style="display:flex; justify-content: center" id="searchTerm">
 </div>
 
 <!-- Modal -->
@@ -33,7 +35,7 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Create Note</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">Create ToDo</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -55,7 +57,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" onclick="saveNote()">Save changes</button>
+				<button type="button" class="btn btn-primary" onclick="saveTodo()">Save Changes</button>
 			</div>
 		</div>
 	</div>

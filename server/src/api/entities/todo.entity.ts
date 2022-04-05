@@ -1,13 +1,13 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from 'typeorm';
-import {Person} from "./user.entity";
+import {Person} from "./person.entity";
 
 @Entity()
-export class Note {
+export class Todo {
     @PrimaryGeneratedColumn()
     public id!: number;
 
     @Column({type: 'varchar', length: 120})
-    public note: string;
+    public text: string;
 
      @Column({type: 'varchar', length: 120})
      public category: string;
@@ -18,6 +18,6 @@ export class Note {
     @Column({type: 'boolean'})
     public done: boolean;
 
-    @ManyToOne(() => Person, (user) => user.notes)
+    @ManyToOne(() => Person, (person) => person.todos)
     person: Person;
 }

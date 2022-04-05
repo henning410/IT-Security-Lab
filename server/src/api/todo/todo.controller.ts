@@ -1,21 +1,21 @@
 import {Body, Controller, Delete, Get, Inject, Post, Put, Query, ValidationPipe} from '@nestjs/common';
-import {NoteService} from "./note.service";
-import {Note} from "../entities/note.entity";
+import {TodoService} from "./todo.service";
+import {Todo} from "../entities/todo.entity";
 import {UpdateResult} from "typeorm";
-import {Person} from "../entities/user.entity";
+import {Person} from "../entities/person.entity";
 
-@Controller('note')
-export class NoteController {
-    @Inject(NoteService)
-    private readonly service: NoteService;
+@Controller('todo')
+export class TodoController {
+    @Inject(TodoService)
+    private readonly service: TodoService;
 
     @Get()
-    public getNotesByUser(@Query('id') id: number): Promise<Note[]> {
+    public getTodosByUser(@Query('id') id: number): Promise<Todo[]> {
         return this.service.getNotesByUser(id);
     }
 
     @Get('/category')
-    public getNotesByCategoryAndUser(@Query('userId') id: number, @Query('category') category: any): Promise<Note[]> {
+    public getTodosByCategoryAndUser(@Query('userId') id: number, @Query('category') category: string) {
         return this.service.getNotesByCategoryAndUser(id, category);
     }
 
@@ -25,9 +25,8 @@ export class NoteController {
     }
 
     @Post('/create')
-    public addNote(@Body() note: any) {
-        console.log('NOTIZ: ', note);
-        return this.service.add(note.category, note.note, note.dueDate, note.personId);
+    public addTodo(@Body() todo: any) {
+        return this.service.add(todo.category, todo.text, todo.dueDate, todo.personId);
     }
 
     @Delete()

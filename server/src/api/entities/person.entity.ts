@@ -1,5 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from 'typeorm';
-import {Note} from "./note.entity";
+import {Todo} from "./todo.entity";
 
 @Entity()
 export class Person {
@@ -15,6 +15,6 @@ export class Person {
     @Column({type: 'varchar', length: 120})
     public password: string;
 
-    @OneToMany(() => Note, (note) => note.person)
-    public notes: Note[];
+    @OneToMany(() => Todo, (note) => note.person)
+    public todos: Todo[];
 }
