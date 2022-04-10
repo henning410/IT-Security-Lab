@@ -1,8 +1,10 @@
 let user;
-/*let searchTerm = '';*/
+
 window.addEventListener('load', async function () {
-    console.log('username from cookie: ', getCookie('username'));
     const div = document.querySelector('.usernamePlace');
+    if (getCookie('username') === '') {
+        window.location.href = 'login.html';
+    }
     div.innerHTML = getCookie('username');
     await getUser();
     await loadAllTodos();
@@ -10,9 +12,8 @@ window.addEventListener('load', async function () {
 
 //Method to get current user object from backend using cookie data
 async function getUser() {
-    const response1 = await fetch('http://localhost:3000/user/getByName?username=' + getCookie('username'));
+    const response1 = await fetch('http://localhost:3000/person/getByName?username=' + getCookie('username'));
     user = await response1.json();
-    console.log('User from backend: ', user);
 }
 
 //Method to load all todos from backend for specific user
@@ -75,15 +76,15 @@ let createTodoCard = (todo) => {
     cardHeader.style.justifyContent = 'space-between';
 
     cardHeader.innerText = todo.category;
-    let deleteIocn = document.createElement('i');
-    deleteIocn.className = 'fa fa-trash-o';
-    deleteIocn.ariaHidden = 'true';
-    deleteIocn.style.cursor = 'pointer';
-    deleteIocn.setAttribute('data-toggle', 'tooltip');
-    deleteIocn.setAttribute('data-placement', 'top');
-    deleteIocn.setAttribute('title', 'Delete');
-    cardHeader.appendChild(deleteIocn);
-    deleteIocn.onclick = async () => {
+    let deleteIcon = document.createElement('i');
+    deleteIcon.className = 'fa fa-trash-o';
+    deleteIcon.ariaHidden = 'true';
+    deleteIcon.style.cursor = 'pointer';
+    deleteIcon.setAttribute('data-toggle', 'tooltip');
+    deleteIcon.setAttribute('data-placement', 'top');
+    deleteIcon.setAttribute('title', 'Delete');
+    cardHeader.appendChild(deleteIcon);
+    deleteIcon.onclick = async () => {
         await deleteTodo(todo);
     }
 
@@ -147,7 +148,6 @@ async function submit() {
                 div.appendChild(createTodoCard(todo));
             })
         }
-        /*searchTerm = value;*/
         const searchTerm = document.querySelector('#searchTerm');
         searchTerm.innerHTML = 'Searchterm: ' + value;
     } else {
@@ -158,10 +158,12 @@ async function submit() {
 }
 
 function logout() {
+    document.cookie = '';
     window.location.href = "login.html";
 }
 
 //Method extract data from cookie
+//This method is from https://www.w3schools.com/js/js_cookies.asp
 function getCookie(key) {
     let name = key + "=";
     let decodedCookie = decodeURIComponent(document.cookie);

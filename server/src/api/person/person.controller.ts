@@ -4,7 +4,7 @@ import { PersonService } from './person.service';
 import { Logger } from '@nestjs/common';
 import {InsertResult} from "typeorm";
 
-@Controller('user')
+@Controller('person')
 export class PersonController {
     @Inject(PersonService)
     private readonly service: PersonService;
