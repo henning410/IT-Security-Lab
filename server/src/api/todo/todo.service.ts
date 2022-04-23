@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Todo} from "../entities/todo.entity";
-import {Repository, SelectQueryBuilder, UpdateResult} from "typeorm";
+import {Repository, UpdateResult} from "typeorm";
 import {Person} from "../entities/person.entity";
 
 @Injectable()
@@ -9,13 +9,13 @@ export class TodoService {
     @InjectRepository(Todo)
     private readonly repository: Repository<Todo>;
 
-    public getNotesByUser(id: number): Promise<Todo[]> {
+    public getTodosByUser(id: number): Promise<Todo[]> {
         return this.repository.query('SELECT *  FROM todo WHERE "personId" = ' + id + 'ORDER BY id ASC');
     }
 
-    public async getNotesByCategoryAndUser(userId: number, category: string)  {
-        const todosByCategory = await this.repository.query('SELECT *  FROM todo WHERE category = ' + category);
-        return todosByCategory.filter(todo => todo.personId == userId);
+    public async getTodosByCategoryAndUser(userId: number, category: any)  {
+        const sql = 'SELECT *  FROM todo WHERE category =' + "'" + category + "'" + ' AND "personId" = ' + userId;
+        return await this.repository.query(sql);
     }
 
     public changeState(id: number, currentState: boolean): Promise<UpdateResult> {

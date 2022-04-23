@@ -53,7 +53,6 @@ async function saveTodo() {
         "text": description,
         "dueDate": dueDate,
     }
-    console.log('Neue Notiz: ', todo);
     await fetch('http://localhost:3000/todo/create', {
         method: 'POST',
         headers: {

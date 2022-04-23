@@ -1,7 +1,6 @@
-import {Body, Controller, Get, Inject, Param, ParseIntPipe, Post, Query} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Post, Query} from '@nestjs/common';
 import { Person } from '../entities/person.entity';
 import { PersonService } from './person.service';
-import { Logger } from '@nestjs/common';
 import {InsertResult} from "typeorm";
 
 @Controller('person')
@@ -31,7 +30,6 @@ export class PersonController {
 
     @Post()
     public createUser(@Body() body: any): Promise<InsertResult> {
-        console.log('HIER', body);
         return this.service.createUser(body);
     }
 }

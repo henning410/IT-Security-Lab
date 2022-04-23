@@ -15,8 +15,7 @@ async function createUser() {
         const div = document.querySelector('.login');
         insertAfter(alert, div);
     } else {
-        console.log('Neuer User: ', user);
-        await fetch('http://localhost:3000/user', {
+        await fetch('http://localhost:3000/person', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
